@@ -1,0 +1,40 @@
+{
+  "name": "guftgoon",
+  "version": "1.0.0",
+  "license": "GPL-3.0",
+  "description": "Send and receive messages with guftgoon. A open source alternative to all modern realtime chat applications out their. it is full fledge realTime chat app made using nextjs, tailwindcss and firebase",
+  "author": {
+    "name": "kamal kashyap",
+    "email": "iamkamalkumar@proton.me"
+  },
+  "funding": "https://www.buymeacoffee.com/kamalkashyap",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "firebase": "^9.9.1",
+    "next": "12.1.6",
+    "next-pwa": "5.5.2",
+    "preact": "^10.10.0",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "sharp": "^0.30.7",
+    "webpack": "^5.74.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.7",
+    "eslint": "8.15.0",
+    "eslint-config-next": "^12.1.6",
+    "eslint-plugin-next": "^0.0.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "husky": "^8.0.1",
+    "postcss": "^8.4.13",
+    "prettier": "^2.6.2",
+    "tailwindcss": "^3.1.7"
+  }
+}
