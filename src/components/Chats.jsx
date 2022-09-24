@@ -7,7 +7,7 @@ import { db, auth } from '../utils/firebase';
 import { useAuth } from '../context/AuthContext';
 import Router from 'next/router';
 import { signOut } from 'firebase/auth';
-import InstallApp from './InstallApp';
+import Image from 'next/image';
 
 function Chats() {
   const { currentUser } = useAuth();
@@ -29,12 +29,14 @@ function Chats() {
   }, [currentUser]);
 
   return (
-    <>
-      <div className="text-xl flex justify-between items-center pl-5 h-[4rem] sm:text-2xl md:text-3xl font-bold text-green-500">
+    <div className="relative">
+      <div className="text-xl flex justify-between items-center pl-5 h-[3rem] sm:text-2xl md:text-3xl font-bold text-green-500">
         <span>Chats</span>
-        <InstallApp />
       </div>
-      <div className="overflow-y-auto h-[calc(100vh-8rem)]">
+      <div className="min-h-[2.5rem] ">
+        <Search />
+      </div>
+      <div className="overflow-y-auto h-[calc(100vh-9.5rem)]">
         {chats &&
           Object.entries(chats)
             ?.sort((a, b) => b[1].date - a[1].date)
@@ -55,7 +57,7 @@ function Chats() {
               </div>
             ))}
       </div>
-      <div className="border-t  dark:border-gray-600 h-[4rem] px-5 pt-2 flex items-start justify-between">
+      <div className="border-t dark:border-gray-600 h-[4rem] px-5 pt-2 flex items-start justify-between">
         <button
           className="text-green-600"
           onClick={() => {
@@ -64,53 +66,63 @@ function Chats() {
         >
           Sign Out
         </button>
-        <span className="mr-7">{currentUser && currentUser.displayName}</span>
-        <button
-          id="addChat"
+        <span className="mr-7 mt-1">
+          {currentUser && currentUser.displayName}
+        </span>
+        <svg
+          className="fill-green-500 mt-2 cursor-pointer"
           onClick={() => {
-            let addChat = document.getElementById('addChat');
             document.getElementById('portal').classList.toggle('hidden');
-            addChat.innerText = addChat.innerText == '+' ? 'x' : '+';
           }}
-          className="text-2xl text-green-500 z-20"
+          width="24"
+          height="24"
+          viewBox="0 0 16 16"
         >
-          +
-        </button>
+          <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+        </svg>
       </div>
       <div
         id="portal"
         onClick={() => {
-          document.getElementById('portal').classList.add('hidden');
-          let addChat = document.getElementById('addChat');
-          addChat.innerText = addChat.innerText == '+' ? 'x' : '+';
+          document.getElementById('portal').classList.toggle('hidden');
         }}
-        className=" hidden h-screen w-full backdrop-brightness-75 backdrop-blur-sm fixed top-0 left-0 z-10"
+        className=" hidden absolute overflow-scroll bottom-[4.5rem] right-2 bg-[#313131] p-2 pr-10 rounded-xl"
       >
-        <div className=" h-screen w-screen flex flex-col justify-center items-center">
-          <div className="w-1/2 py-4">
-            <svg
-              width="40"
-              height="40"
-              className="fill-green-500 cursor-pointer"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fillRule="evenodd"
-                d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
-              />
-            </svg>
-          </div>
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="flex z-20 flex-col bg-[#353535a4] p-5 rounded-xl w-1/2"
-          >
-            <Search />
-          </div>
-        </div>
+        {currentUser && (
+          <>
+            <div className="flex flex-col mb-2 text-xl md:text-xl">
+              <div className="flex items-center space-x-3">
+                <div className=" relative h-12 w-12">
+                  <Image
+                    src={currentUser.photoURL}
+                    alt={currentUser.displayName[0]}
+                    layout="fill"
+                    className="rounded-full"
+                  />
+                </div>
+                <h2 className="text-[#797979]">{currentUser.displayName}</h2>
+              </div>
+              <div>
+                <h1 className="text-lg md:text-xl break-words">
+                  {currentUser.email}
+                </h1>
+              </div>
+              <div className="text-green-500 flex flex-col items-start space-y-2 mt-5">
+                <button>Profile</button>
+                <button
+                  className="text-green-600"
+                  onClick={() => {
+                    signOut(auth);
+                  }}
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 

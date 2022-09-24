@@ -83,7 +83,7 @@ const Search = () => {
 
   return (
     <>
-      <div className="flex w-full border p-1 my-3 rounded-xl">
+      <div className="flex w-full border border-black dark:border-white py-1 md:pb-0 rounded-xl">
         <button
           onClick={handleSearch}
           disabled={email ? false : true}
@@ -92,7 +92,7 @@ const Search = () => {
           <svg
             width="16"
             height="16"
-            className="w-5 h-5 mr-3 fill-white"
+            className="w-5 h-5 mr-3 fill-black dark:fill-white"
             viewBox="0 0 16 16"
           >
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -115,17 +115,7 @@ const Search = () => {
         />
       </div>
       {user && (
-        <div
-          className=" w-full"
-          onClick={() => {
-            handleSelect();
-            setTimeout(() => {
-              document.getElementById('portal').classList.add('hidden');
-              let addChat = document.getElementById('addChat');
-              addChat.innerText = addChat.innerText == '+' ? 'x' : '+';
-            }, 500);
-          }}
-        >
+        <div className="w-full" onClick={handleSelect}>
           <Chat user={user} />
         </div>
       )}

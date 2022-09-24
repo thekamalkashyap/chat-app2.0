@@ -8,7 +8,7 @@ export default function Document() {
     setUrl(`https://${window.location.host}/`);
   }, []);
   return (
-    <Html>
+    <Html className="dark">
       <Head>
         <meta name="author" content="kamal kashyap" />
         <link rel="manifest" href="/manifest.json" />

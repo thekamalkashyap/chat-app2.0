@@ -3,7 +3,7 @@ import ghost from '../../public/ghost.png';
 function Chat({ user, lastMessage }) {
   return (
     <>
-      <div className="my-3 rounded-lg flex items-center py-2 dark:hover:bg-[#313131] hover:bg-gray-100 cursor-pointer ">
+      <div className="mt-3 rounded-lg flex items-center py-2 dark:hover:bg-[#313131] hover:bg-gray-100 cursor-pointer ">
         <div className=" h-10 w-10 sm:h-12 sm:w-12 mx-3 relative">
           {user.photoURL ? (
             <Image

@@ -89,7 +89,7 @@ const Chat = () => {
           <Chats />
         </div>
         <div className="w-full md:w-[60vw]">
-          <div className="h-[4rem] border-b dark:border-gray-600 px-5 flex items-center justify-between md:justify-end">
+          <div className="h-[3rem] border-b dark:border-gray-600 px-5 flex items-center justify-between md:justify-end">
             <button
               onClick={() => {
                 Router.replace('/');
@@ -102,7 +102,7 @@ const Chat = () => {
               <h1>{user.displayName}</h1>
             </div>
           </div>
-          <div className="h-[calc(100vh-8rem)] overflow-y-auto">
+          <div className="h-[calc(100vh-7rem)] overflow-y-auto">
             {messages &&
               messages.map((message) => (
                 <div key={message.id}>
