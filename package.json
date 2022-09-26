@@ -16,7 +16,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "firebase": "^9.9.1",
+    "firebase": "^9.9.4",
     "next": "12.1.6",
     "next-pwa": "5.5.2",
     "preact": "^10.10.0",
