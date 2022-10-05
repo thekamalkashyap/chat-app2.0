@@ -1,12 +1,7 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 import config from '../utils/config.json';
-import { useEffect, useState } from 'react';
 
 export default function Document() {
-  const [url, setUrl] = useState('');
-  useEffect(() => {
-    setUrl(`https://${window.location.host}/`);
-  }, []);
   return (
     <Html className="dark">
       <Head>
@@ -28,7 +23,7 @@ export default function Document() {
         <link rel="mask-icon" href={`${config.logo}`} />
         <link rel="shortcut icon" href={`${config.logo}`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={url} />
+        <meta name="twitter:url" content={config.url} />
         <meta name="twitter:title" content={`${config.name}`} />
         <meta name="twitter:description" content={`${config.description}`} />
         <meta name="twitter:image" content={`${config.opImage}`} />
@@ -37,7 +32,7 @@ export default function Document() {
         <meta property="og:title" content={`${config.name}`} />
         <meta property="og:description" content={`${config.description}`} />
         <meta property="og:site_name" content={`${config.name}`} />
-        <meta property="og:url" content={url} />
+        <meta property="og:url" content={config.url} />
         <link rel="apple-touch-startup-image" href={`${config.logo}`} />
       </Head>
       <body>

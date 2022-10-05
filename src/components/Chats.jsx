@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import Router from 'next/router';
 import { signOut } from 'firebase/auth';
 import Image from 'next/image';
+import ghost from '../../public/ghost.png';
 
 function Chats() {
   const { currentUser } = useAuth();
@@ -93,18 +94,30 @@ function Chats() {
             <div className="flex flex-col mb-2 text-xl md:text-xl">
               <div className="flex items-center space-x-3">
                 <div className=" relative h-12 w-12">
-                  <Image
-                    src={currentUser.photoURL}
-                    alt={currentUser.displayName[0]}
-                    layout="fill"
-                    className="rounded-full"
-                  />
+                  {currentUser.photoURL ? (
+                    <Image
+                      src={currentUser.photoURL}
+                      alt={currentUser.displayName[0]}
+                      layout="fill"
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <Image
+                      src={ghost}
+                      alt="U"
+                      layout="fill"
+                      className="rounded-full"
+                    />
+                  )}
                 </div>
-                <h2 className="text-[#797979]">{currentUser.displayName}</h2>
+                <h2 className="text-[#797979]">
+                  {currentUser.displayName ? currentUser.displayName : 'User'}
+                </h2>
               </div>
               <div>
                 <h1 className="text-lg md:text-xl break-words">
-                  {currentUser.email}
+                  {currentUser.phoneNumber}
+                  {console.log(currentUser)}
                 </h1>
               </div>
               <div className="text-green-500 flex flex-col items-start space-y-2 mt-5">

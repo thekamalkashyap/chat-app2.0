@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect, useMemo, createContext } from 'react';
 import { auth } from '../utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import Authentication from '../components/Authentication';
 
 const AuthContext = createContext();
 
@@ -10,9 +11,11 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setLoading(false);
       setCurrentUser(user);
     });
     return () => {
@@ -22,7 +25,12 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ currentUser }}>
-      {children}
+      {!loading && <>{currentUser ? children : <Authentication />}</>}
+      {loading && (
+        <div className=" h-screen w-screen flex justify-center items-center">
+          loading...
+        </div>
+      )}
     </AuthContext.Provider>
   );
 };

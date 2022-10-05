@@ -1,7 +1,7 @@
 {
   "name": "Guftgoon",
-  "description": "Send and receive messages with guftgoon. A open source alternative to all modern realtime chat applications out their. it is full fledge realTime chat app made using nextjs, tailwindcss and firebase.",
+  "description": "Send and receive messages with guftgoon. A open source alternative to all modern realtime chat applications out their. it is full fledge realtime chat app made using nextjs, tailwindcss and firebase.",
   "logo": "/logo.ico",
-  "opImage":"/ogLogo.webp"
-
+  "opImage": "/ogLogo.webp",
+  "url": "https://leindein.vercel.app"
 }

@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { AuthProvider } from '../context/AuthContext';
 import { ChatProvider } from '../context/ChatContext';
 import config from '../utils/config.json';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function MyApp({ Component, pageProps }) {
   return (
     <>
@@ -15,6 +17,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </ChatProvider>
       </AuthProvider>
+      <ToastContainer theme="colored" autoClose={2000} />
     </>
   );
 }
