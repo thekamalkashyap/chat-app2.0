@@ -16,20 +16,16 @@ export const ChatProvider = ({ children }) => {
   };
 
   const chatReducer = (state, action) => {
-    const combinedEmail =
-      currentUser.email > action.payload.email
-        ? `${currentUser.email.split('.').join('_')},${action.payload.email
-            .split('.')
-            .join('_')}`
-        : `${action.payload.email.split('.').join('_')},${currentUser.email
-            .split('.')
-            .join('_')}`;
+    const combinedId =
+      currentUser.uid > action.payload.uid
+        ? currentUser.uid + action.payload.uid
+        : action.payload.uid + currentUser.uid;
 
     switch (action.type) {
       case 'CHANGE_USER':
         return {
           user: action.payload,
-          chatId: combinedEmail,
+          chatId: combinedId,
         };
 
       default:

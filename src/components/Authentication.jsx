@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import config from '../utils/config.json';
 import { toast } from 'react-toastify';
-import { auth } from '../utils/firebase';
+import { auth, db } from '../utils/firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
 
 const Authentication = () => {
   const [number, setNumber] = useState('');
@@ -14,15 +15,12 @@ const Authentication = () => {
       'recaptcha',
       {
         size: 'invisible',
-        callback: (response) => {
-          console.log(response);
-        },
       },
       auth
     );
   };
 
-  const GenerateOtp = (e) => {
+  const GenerateOtp = async (e) => {
     e.preventDefault();
     if (number.length >= 12) {
       generateRecaptcha();
@@ -44,9 +42,21 @@ const Authentication = () => {
     e.preventDefault();
     let otp = document.getElementById('otp').value;
     if (otp.length == 6) {
-      window.confirmationResult.confirm(otp).catch((err) => {
-        toast.error(err.code);
-      });
+      window.confirmationResult
+        .confirm(otp)
+        .then(async (res) => {
+          await setDoc(doc(db, 'users', res.user.uid), {
+            uid: res.user.uid,
+            displayName: 'user',
+            phoneNumber: res.user.phoneNumber,
+            photoURL: '',
+          });
+
+          await setDoc(doc(db, 'userChats', res.user.uid), {});
+        })
+        .catch((err) => {
+          toast.error(err.code);
+        });
     }
   };
 
@@ -70,8 +80,15 @@ const Authentication = () => {
               name="number"
               id="number"
               value={number}
+              onKeyDown={(e) => {
+                if (e.key == 'Backspace') {
+                  setNumber(e.target.value);
+                }
+              }}
               onChange={(e) => {
-                setNumber(e.target.value);
+                if (e.target.value.length <= 13) {
+                  setNumber(e.target.value);
+                }
               }}
             />
             <button className=" py-1 rounded-lg text-white font-semibold bg-green-500">
@@ -91,8 +108,15 @@ const Authentication = () => {
                 name="otp"
                 id="otp"
                 value={otp}
+                onKeyDown={(e) => {
+                  if (e.key == 'Backspace') {
+                    setOtp(e.target.value);
+                  }
+                }}
                 onChange={(e) => {
-                  setOtp(e.target.value);
+                  if (e.target.value.length <= 6) {
+                    setOtp(e.target.value);
+                  }
                 }}
               />
               <button className=" rounded-lg py-1 text-white font-semibold bg-green-500">

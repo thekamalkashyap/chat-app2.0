@@ -49,7 +49,7 @@ const Chat = () => {
             messages: arrayUnion({
               id: Timestamp.now().nanoseconds,
               text,
-              sender: currentUser.displayName,
+              sender: currentUser.uid,
               date: Timestamp.now(),
               image: downloadURL,
             }),
@@ -61,18 +61,18 @@ const Chat = () => {
         messages: arrayUnion({
           id: Timestamp.now().nanoseconds,
           text,
-          sender: currentUser.displayName,
+          sender: currentUser.uid,
           date: Timestamp.now(),
         }),
       });
     }
-    await updateDoc(doc(db, 'userChats', currentUser.email), {
+    await updateDoc(doc(db, 'userChats', currentUser.uid), {
       [data.chatId + '.lastMessage']: {
         text,
       },
       [data.chatId + '.date']: serverTimestamp(),
     });
-    await updateDoc(doc(db, 'userChats', data.user.email), {
+    await updateDoc(doc(db, 'userChats', data.user.uid), {
       [data.chatId + '.lastMessage']: {
         text,
       },

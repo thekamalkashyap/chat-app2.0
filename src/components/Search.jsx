@@ -13,14 +13,18 @@ import {
 } from 'firebase/firestore';
 import { useState } from 'react';
 import Chat from './Chat';
+import { toast } from 'react-toastify';
 
 const Search = () => {
   const [user, setUser] = useState(null);
   const { currentUser } = useAuth();
-  const [email, setEmail] = useState('');
+  const [number, setNumber] = useState('');
 
   const handleSearch = async () => {
-    const q = query(collection(db, 'users'), where('email', '==', email));
+    const q = query(
+      collection(db, 'users'),
+      where('phoneNumber', '==', number)
+    );
 
     try {
       const querySnapshot = await getDocs(q);
@@ -28,57 +32,48 @@ const Search = () => {
         setUser(doc.data());
       });
     } catch (err) {
-      setEmail(err.code);
-      setTimeout(() => {
-        setEmail('');
-      }, 2000);
+      toast.error(err.code);
     }
   };
 
   const handleSelect = async () => {
-    const combinedEmail =
-      currentUser.email > user.email
-        ? `${currentUser.email.split('.').join('_')},${user.email
-            .split('.')
-            .join('_')}`
-        : `${user.email.split('.').join('_')},${currentUser.email
-            .split('.')
-            .join('_')}`;
+    const combinedId =
+      currentUser.uid > user.uid
+        ? currentUser.uid + user.uid
+        : user.uid + currentUser.uid;
+
     try {
-      const res = await getDoc(doc(db, 'chats', combinedEmail));
+      const res = await getDoc(doc(db, 'chats', combinedId));
 
       if (!res.exists()) {
-        await setDoc(doc(db, 'chats', combinedEmail), { messages: [] });
+        await setDoc(doc(db, 'chats', combinedId), { messages: [] });
 
-        await updateDoc(doc(db, 'userChats', currentUser.email), {
-          [combinedEmail + '.userInfo']: {
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [combinedId + '.userInfo']: {
             uid: user.uid,
-            email: user.email,
+            phoneNumber: user.phoneNumber,
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
-          [combinedEmail + '.date']: serverTimestamp(),
+          [combinedId + '.date']: serverTimestamp(),
         });
 
-        await updateDoc(doc(db, 'userChats', user.email), {
-          [combinedEmail + '.userInfo']: {
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.userInfo']: {
             uid: currentUser.uid,
-            email: currentUser.email,
+            phoneNumber: currentUser.phoneNumber,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
-          [combinedEmail + '.date']: serverTimestamp(),
+          [combinedId + '.date']: serverTimestamp(),
         });
       }
     } catch (err) {
-      setEmail(err.code);
-      setTimeout(() => {
-        setEmail('');
-      }, 2000);
+      toast.error(err);
     }
 
     setUser(null);
-    setEmail('');
+    setNumber('');
   };
 
   return (
@@ -86,7 +81,7 @@ const Search = () => {
       <div className="flex w-full border border-black dark:border-white py-1 md:pb-0 rounded-xl">
         <button
           onClick={handleSearch}
-          disabled={email ? false : true}
+          disabled={number ? false : true}
           className=" disabled:opacity-60 ml-2 "
         >
           <svg
@@ -100,16 +95,16 @@ const Search = () => {
         </button>
         <input
           type="email"
-          value={email}
-          placeholder="Search user email"
+          value={number}
+          placeholder="Search phone number"
           onKeyDown={(e) => {
-            if (e.key == 'Enter' && email) {
+            if (e.key == 'Enter' && number) {
               e.preventDefault();
               handleSearch();
             }
           }}
           onChange={(e) => {
-            setEmail(e.target.value);
+            setNumber(e.target.value);
           }}
           className="px-3 w-full focus:outline-none bg-transparent"
         />

@@ -16,13 +16,14 @@ function Chats() {
   const { dispatch } = useChat();
 
   useEffect(() => {
-    if (currentUser && currentUser.email) {
-      const unsub = onSnapshot(
-        doc(db, 'userChats', currentUser.email),
-        (doc) => {
+    if (currentUser && currentUser.uid) {
+      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+        if (doc.exists()) {
           setChats(doc.data());
+        } else {
+          setChats('noChats');
         }
-      );
+      });
       return () => {
         unsub();
       };
@@ -57,6 +58,8 @@ function Chats() {
                 />
               </div>
             ))}
+        {chats == 'noChats' && 'No chats found'}
+        {!chats && 'loading..'}
       </div>
       <div className="border-t dark:border-gray-600 h-[4rem] px-5 pt-2 flex items-start justify-between">
         <button
@@ -97,27 +100,26 @@ function Chats() {
                   {currentUser.photoURL ? (
                     <Image
                       src={currentUser.photoURL}
-                      alt={currentUser.displayName[0]}
+                      alt=""
                       layout="fill"
                       className="rounded-full"
+                      priority
                     />
                   ) : (
                     <Image
                       src={ghost}
-                      alt="U"
+                      alt=""
                       layout="fill"
                       className="rounded-full"
+                      priority
                     />
                   )}
                 </div>
-                <h2 className="text-[#797979]">
-                  {currentUser.displayName ? currentUser.displayName : 'User'}
-                </h2>
+                <h2 className="text-[#797979]">{currentUser.displayName}</h2>
               </div>
               <div>
                 <h1 className="text-lg md:text-xl break-words">
                   {currentUser.phoneNumber}
-                  {console.log(currentUser)}
                 </h1>
               </div>
               <div className="text-green-500 flex flex-col items-start space-y-2 mt-5">
